@@ -1,6 +1,19 @@
 (() => {
   "use strict";
 
+  // Update this to your deployed backend's URL after connecting the repo to a host like Vercel.
+  const DEPLOYED_API_URL = "https://odds2excel.vercel.app/api/extract";
+  const API_URL = location.hostname.endsWith("github.io") ? DEPLOYED_API_URL : "/api/extract";
+
+  function readFileAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(reader.error || new Error("Failed to read file."));
+      reader.readAsDataURL(file);
+    });
+  }
+
   const FIELD_KEYS = [
     "w1", "draw", "w2",
     "over15", "under15",
@@ -104,9 +117,12 @@
 
       uploadStatus.textContent = "Extracting odds from screenshot...";
       try {
-        const formData = new FormData();
-        formData.append("screenshot", file);
-        const resp = await fetch("/api/extract", { method: "POST", body: formData });
+        const dataUrl = await readFileAsDataUrl(file);
+        const resp = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: dataUrl })
+        });
         const payload = await resp.json();
         if (!resp.ok) throw new Error(payload.error || "Extraction failed.");
 
