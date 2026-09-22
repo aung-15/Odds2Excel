@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Odds to Excel</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Odds &rarr; Excel Table Builder</h1>
+      <p class="subtitle">
+        Paste odds text you copied from a betting page (or type them in), organize matches into a
+        clean table, and export straight to a <code>.xlsx</code> file.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <button id="addMatchBtn" class="btn primary">+ Add Match</button>
+      <label class="toggle">
+        <input type="checkbox" id="showProbability" />
+        Show implied probability %
+      </label>
+      <button id="exportBtn" class="btn success">Export to Excel</button>
+    </div>
+
+    <div id="matchList" class="match-list"></div>
+
+    <section class="preview">
+      <h2>Preview Table</h2>
+      <div class="table-wrap">
+        <table id="previewTable">
+          <thead>
+            <tr id="previewHeadRow"></tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <template id="matchCardTemplate">
+    <div class="match-card" data-id="">
+      <div class="match-card-header">
+        <input type="text" class="home-input" placeholder="Home team (e.g. Arsenal)" />
+        <span class="vs">vs</span>
+        <input type="text" class="away-input" placeholder="Away team (e.g. Coventry)" />
+        <button class="btn danger remove-btn" title="Remove match">&times;</button>
+      </div>
+
+      <div class="paste-row">
+        <textarea class="paste-input" placeholder="Paste the odds text you copied from the betting site here, then click Parse..."></textarea>
+        <button class="btn parse-btn">Parse pasted text</button>
+      </div>
+
+      <div class="upload-row">
+        <label class="upload-label">
+          <input type="file" class="screenshot-input" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+          <span class="btn upload-btn">Upload screenshot</span>
+        </label>
+        <span class="upload-status"></span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-group">
+          <h4>Match Result (1X2)</h4>
+          <label>Home win (1) <input type="text" class="f" data-field="w1" inputmode="decimal" /></label>
+          <label>Draw (X) <input type="text" class="f" data-field="draw" inputmode="decimal" /></label>
+          <label>Away win (2) <input type="text" class="f" data-field="w2" inputmode="decimal" /></label>
+        </div>
+
+        <div class="field-group">
+          <h4>Total Goals</h4>
+          <label>Over 1.5 <input type="text" class="f" data-field="over15" inputmode="decimal" /></label>
+          <label>Under 1.5 <input type="text" class="f" data-field="under15" inputmode="decimal" /></label>
+          <label>Over 2.5 <input type="text" class="f" data-field="over25" inputmode="decimal" /></label>
+          <label>Under 2.5 <input type="text" class="f" data-field="under25" inputmode="decimal" /></label>
+          <label>Over 3.5 <input type="text" class="f" data-field="over35" inputmode="decimal" /></label>
+          <label>Under 3.5 <input type="text" class="f" data-field="under35" inputmode="decimal" /></label>
+        </div>
+
+        <div class="field-group">
+          <h4>Both Teams To Score</h4>
+          <label>BTTS Yes <input type="text" class="f" data-field="bttsYes" inputmode="decimal" /></label>
+          <label>BTTS No <input type="text" class="f" data-field="bttsNo" inputmode="decimal" /></label>
+        </div>
+      </div>
+      <p class="parse-note"></p>
+    </div>
+  </template>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
